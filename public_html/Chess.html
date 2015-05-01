@@ -1,0 +1,518 @@
+
+<html>
+    <head>
+        <title>Chess</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="http://yui.yahooapis.com/3.18.1/build/yui/yui-min.js"></script>
+        <style>
+            img {
+                width : 50px;
+                height: 50px;
+           }
+            
+            td{
+                width : 70px;
+                height: 70px;
+                text-align: center;
+                align: center;
+            }
+            
+            #chessboard {
+                width : 560px;
+                height : 560px;
+            }
+            
+            tr:nth-child(odd) td:nth-child(even), tr:nth-child(even) td:nth-child(odd) {
+                background-color: gray;
+            }
+            tr:nth-child(odd) td:nth-child(odd), tr:nth-child(even) td:nth-child(even){
+                background-color: whitesmoke;
+            }
+            table {
+                alignment-adjust: auto;
+                margin : auto;
+            }
+            #super-centered{
+                position: absolute;
+                width: 100;
+                height: 100;
+                vertical-align: middle;
+                text-align: center;
+                z-index: 9999;
+            }
+        </style>
+      
+    </head>
+    <body>
+
+    <table id="chessboard" class="table table-bordered">
+        <caption><b>CHESS</b></caption>
+      
+      <tbody id="tableBody">
+          <tr>
+                <td id="57"><img id="bR1" class="item" src="bR.png"></td>
+                <td id="58"><img id="bN1" class="item" src="bN.png"></td>
+                <td id="59"><img id="bB1" class="item" src="bB.png"></td>
+                <td id="60"><img id="bQ" class="item" src="bQ.png"></td>
+                <td id="61"><img id="bK" class="item" src="bK.png"></td>
+                <td id="62"><img id="bB2" class="item" src="bB.png"></td>
+                <td id="63"><img id="bN1" class="item" src="bN.png"></td>
+                <td id="64"><img id="bR1" class="item" src="bR.png"></td>
+          </tr>
+          <tr>
+                <td id="49"><img id="bP1" class="item" src="bP.png"></td>
+                <td id="50"><img id="bP2" class="item" src="bP.png"></td>
+                <td id="51"><img id="bP3" class="item" src="bP.png"></td>
+                <td id="52"><img id="bP4" class="item" src="bP.png"></td>
+                <td id="53"><img id="bP5" class="item" src="bP.png"></td>
+                <td id="54"><img id="bP6" class="item" src="bP.png"></td>
+                <td id="55"><img id="bP7" class="item" src="bP.png"></td>
+                <td id="56"><img id="bP8" class="item" src="bP.png"></td>
+          </tr>
+          <tr>
+                <td id="41"></td>
+                <td id="42"></td>
+                <td id="43"></td>
+                <td id="44"></td>
+                <td id="45"></td>
+                <td id="46"></td>
+                <td id="47"></td>
+                <td id="48"></td>
+          </tr>
+          <tr>
+                <td id="33"></td>
+                <td id="34"></td>
+                <td id="35"></td>
+                <td id="36"></td>
+                <td id="37"></td>
+                <td id="38"></td>
+                <td id="39"></td>
+                <td id="40"></td>
+          </tr>
+          <tr>
+                <td id="25"></td>
+                <td id="26"></td>
+                <td id="27"></td>
+                <td id="28"></td>
+                <td id="29"></td>
+                <td id="30"></td>
+                <td id="31"></td>
+                <td id="32"></td>
+          </tr>
+          <tr>
+                <td id="17"></td>
+                <td id="18"></td>
+                <td id="19"></td>
+                <td id="20"></td>
+                <td id="21"></td>
+                <td id="22"></td>
+                <td id="23"></td>
+                <td id="24"></td>
+          </tr>
+          <tr>
+                <td id="9"><img id="wP1" class="item" src="wP.png"></td>
+                <td id="10"><img id="wP2" class="item" src="wP.png"></td>
+                <td id="11"><img id="wP3" class="item" src="wP.png"></td>
+                <td id="12"><img id="wP4" class="item" src="wP.png"></td>
+                <td id="13"><img id="wP5" class="item" src="wP.png"></td>
+                <td id="14"><img id="wP6" class="item" src="wP.png"></td>
+                <td id="15"><img id="wP7" class="item" src="wP.png"></td>
+                <td id="16"><img id="wP8" class="item" src="wP.png"></td>
+          </tr>
+          <tr>
+                <td id="1"><img id="wR1" class="item" src="wR.png"></td>
+                <td id="2"><img id="wN1" class="item" src="wN.png"></td>
+                <td id="3"><img id="wB1" class="item" src="wB.png"></td>
+                <td id="4"><img id="wQ" class="item" src="wQ.png"></td>
+                <td id="5"><img id="wK" class="item" src="wK.png"></td>
+                <td id="6"><img id="wB2" class="item" src="wB.png"></td>
+                <td id="7"><img id="wN2" class="item" src="wN.png"></td>
+                <td id="8"><img id="wR2" class="item" src="wR.png"></td>
+          </tr>
+      </tbody>
+    </table>
+     
+  <script>
+        /*Script handles movements of the pieces. YUI library methods handle drag/drop events. jQuery and JavaScript methods 
+         * validate the moves. All the validations are done on the basis of 8x8 matrix with id's assigned to each cell from 1 to 64.
+        */ 
+        //left and right edge have the cells that are on the right and left edge of the matrix.
+        var leftEdge = [1,9,,17,25,33,41,49,57];
+        var rightEdge = [8,16,24,32,40,48,56,64];
+        //turn defines whose turn it is to play and first move checks if it is the first move of either white piece or black piece. 
+        var turn = 'w';
+        var firstWhiteMove = true;
+        var firstBlackMove = true;
+        //mouseenter and mouseleave events highlights the cell in focus by red border
+        $(document).ready(function(){
+            $('td').mouseenter(function() {
+                 var myCol = $(this).index();
+                 var $tr = $(this).closest('tr');
+                 var myRow = $tr.index();
+                 $(this).css("border","3px solid red");
+                 //alert(myCol + " " + myRow);
+             });
+                
+            $('td').mouseleave(function() {
+                $(this).css("border","none");
+            });
+        });
+
+        YUI().use('dd-constrain', 'dd-proxy', 'dd-drop', 'dd-drop-plugin', 'dd-plugin', function(Y){
+        //Get the list of img elements and make them draggable
+            var lis = Y.Node.all('#chessboard .item');
+
+            lis.each(function(v, k) {
+                var dd = new Y.DD.Drag({
+                    node: v,
+               }).plug(Y.Plugin.DDProxy, {
+                }).plug(Y.Plugin.DDConstrained, {
+                    //constraint the movements witin the chessboard
+                    constrain2node: '#chessboard'
+                });
+
+                dd.on('drag:end', function(e) {
+                    //at the end of the drag event set the style of img
+                    var drag = this.get('node');
+                    drag.setStyle('top', '0px');
+                    drag.setStyle('left', '0px');
+                });
+
+            });
+            
+            //Get the list of td elements and make them droppable
+            var uls = Y.Node.all('td');
+                uls.each(function(v, k) {
+                var tar = new Y.DD.Drop({
+                    node: v
+                });
+            });
+
+            Y.DD.DDM.on('drag:drophit', function(e) {
+
+                var drop = e.drop.get('node');
+                var drag = e.drag.get('node');
+
+                var dest = drop.getDOMNode();
+                var dragElement = drag.getDOMNode();
+                var src = dragElement.parentNode;
+                var srcStyle=document.defaultView.getComputedStyle(src,null);
+                var dstStyle=document.defaultView.getComputedStyle(dest,null);
+                var color = (srcStyle.getPropertyValue('background-color') === dstStyle.getPropertyValue('background-color'));
+
+                var srcID = src.getAttributeNode("id").value;
+                var dstID = dest.getAttributeNode("id").value;
+
+                var srcID = parseInt(srcID);
+                var dstID = parseInt(dstID);
+
+                var srcType = dragElement.getAttributeNode("id").value[0];
+                var dstType = null;
+                
+                if(drop.hasChildNodes()){
+                    dstType = dest.firstChild.getAttributeNode("id").value[0];
+                }
+                var srcPiece = dragElement.getAttributeNode("id").value[1];
+
+                //Check for alternate turns of each player. Starts with white.
+                if(turn !== srcType){
+                    alert("Opponent's turn to play");
+                }
+                else{
+                    /*Validate the move. If valid, check if destination is empty or has opponent's piece.
+                    * If destination is empty, append child. If it has opponent's piece, replace it.
+                    * Also swith the turn. 
+                    */
+                    var validMove = validateMove(srcID,dstID,srcType,dstType,srcPiece,color);
+                    if(validMove){
+                        if(dstType === null){
+                            dest.appendChild(dragElement);
+                            turn = (turn === 'w') ? 'b' : 'w';
+                        }
+                        else{
+                            turn = (turn === 'w') ? 'b' : 'w';
+                            dest.replaceChild(dragElement,dest.firstChild);
+                        }
+                    }
+                }
+                });
+            });
+            
+            function validateMove(srcID,dstID,srcType,dstType,srcPiece,color){
+                //If stype of source and destination is same, assign it as invalid move
+                if(srcType === dstType){
+                    return false;
+                }
+                
+                switch (srcPiece){
+                    case "P" : return validatePawnMove(srcID,dstID,srcType,dstType,color);
+                    
+                    case "B" : return validateBishopMove(srcID,dstID,srcType,dstType,color);
+                    
+                    case "R" : return validateRookMove(srcID,dstID,srcType,dstType,color);
+                    
+                    case "Q" : return validateQueenMove(srcID,dstID,srcType,dstType,color);
+                    
+                    case "K" : return validateKingMove(srcID,dstID,srcType,dstType,color);
+                    
+                    case "N" : return validateKnigtMove(srcID,dstID,srcType,dstType,color);
+                             
+                    default : return false;
+                    
+                }
+            }
+            
+            function validatePawnMove(srcID,dstID,srcType,dstType){
+
+                if(srcType === 'w'){
+                    if(firstWhiteMove){
+                        if((dstID === (srcID + 8) || dstID === (srcID + 16)) && dstType === null){
+                            firstWhiteMove = false;
+                            return true;
+                        }
+                    }
+                    if(dstID === (srcID + 8) && dstType === null){
+                        return true;
+                    }
+                    else if(dstID === (srcID + 9) && srcType !== dstType && dstType !== null && rightEdge.indexOf(srcID) === -1){
+                        return true;
+                    }
+                    else if(dstID === (srcID + 7) && srcType !== dstType && dstType !== null && leftEdge.indexOf(srcID) === -1){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else if (srcType === 'b'){
+                    if(firstBlackMove){
+                        if((dstID === (srcID - 8) || dstID === (srcID - 16)) && dstType === null){
+                            firstBlackMove = false;
+                            return true;
+                        }
+                    }
+                    if(dstID === (srcID - 8) && dstType === null){
+                       return true;
+                    }
+                    else if(dstID === (srcID - 9) && srcType !== dstType && dstType !== null && leftEdge.indexOf(srcID) === -1){
+                        return true;
+                    }
+                    else if(dstID === (srcID - 7) && srcType !== dstType && dstType !== null && rightEdge.indexOf(srcID) === -1){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                return false;
+            }
+            
+            function validateBishopMove(srcID,dstID,srcType,dstType,color){
+
+                return validateCrossMove(srcID,dstID,srcType,dstType,color);
+
+            }
+            
+            function validateRookMove(srcID,dstID,srcType,dstType,color){
+                                
+                return validateStraightMove(srcID,dstID,srcType,dstType,color);
+                
+            }
+            
+            function validateQueenMove(srcID,dstID,srcType,dstType,color){
+                var diff = Math.abs(srcID - dstID);
+                var abs = Math.abs(dstID-srcID);
+                if(diff%8 === 0 || diff < 7){
+                    return validateStraightMove(srcID,dstID,srcType,dstType,color);
+                }
+                else if((abs%7 === 0 || abs%9 === 0) && color){
+                    return validateCrossMove(srcID,dstID,srcType,dstType,color);
+                }
+                else{
+                    return false;
+                }
+                
+            }
+            
+            function validateKnigtMove(srcID,dstID,srcType,dstType,color){
+                /*
+                 * For a knight, the difference between id's of source and destination would be one of the four value : 6,10,15 and 17.
+                 * The difference between row/column of the matrix can only be either 1 or 2.
+                 */    
+                var abs = Math.abs(srcID - dstID);
+                var srcRow = document.getElementById(srcID).parentNode.rowIndex;
+                var srcCol = document.getElementById(srcID).cellIndex;
+                var dstRow = document.getElementById(dstID).parentNode.rowIndex;
+                var dstCol = document.getElementById(dstID).cellIndex;
+                var rowDiff = Math.abs(srcRow - dstRow);
+                var colDiff = Math.abs(srcCol - dstCol);
+                //alert(srcCol + "" + srcRow + "" + dstCol + "" + dstRow);
+                if((abs === 6 || abs === 10 || abs === 15 || abs === 17) && ((rowDiff === 2 && colDiff === 1) || (rowDiff === 1 && colDiff === 2))){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+            
+            function validateKingMove(srcID,dstID,srcType,dstType,color){
+                /*King's moves are same as Queen with only difference being the movement is restricted to adjacent cell
+                 * So we check for difference between source and destination to be 7, 9, 1 or 8
+                 */
+                var abs = Math.abs(srcID-dstID);
+                var diff = Math.abs(srcID - dstID);
+
+                if(abs === 7 || abs === 9 || abs === 1 || abs === 8)
+                {
+                    if(diff%8 === 0 || diff < 7){
+                        return validateStraightMove(srcID,dstID,srcType,dstType,color);
+                    }
+                    else if((abs%7 === 0 || abs%9 === 0) && color){
+                        return validateCrossMove(srcID,dstID,srcType,dstType,color);
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else{
+                    return false;
+                }
+            }
+            
+            function validateStraightMove(srcID,dstID,srcType,dstType,color){
+                /*
+                 * Rook, Queen and King can move in the same row or column.
+                 * For same row, we check the difference to be less than 8 and compare the row number.
+                 * For same column the difference would be divisible by 8.
+                 * Once above conditions are satisfied, we loop through all the cells between source and destination and
+                 * check if they are empty (cell does not have any child element). 
+                 */
+                var diff = Math.abs(srcID - dstID);
+                                
+                if(diff%8 === 0 || diff <= 7){
+                    if(diff <= 7){
+                        var valid = false;
+                        if(diff === 1 && (document.getElementById(srcID).parentNode.rowIndex === document.getElementById(dstID).parentNode.rowIndex)){
+                            return true;
+                        }
+                        var loop = (srcID < dstID) ? srcID : dstID;
+                        var end = (srcID > dstID) ? srcID : dstID;
+                        
+                        for(loop++; loop < end; loop++){
+                            if(!(document.getElementById(loop).hasChildNodes())){
+                                valid = true;
+                            }
+                            else{
+                                return false;
+                            }
+                        }
+                        return valid;
+                    }
+                    else{
+                        var valid = false;
+                        if(diff === 8){
+                            return true;
+                        }
+                        
+                        var loop = (srcID < dstID) ? srcID : dstID;
+                        var end = (srcID > dstID) ? srcID : dstID;
+                        
+                        for(loop+=8; loop < end;loop+=8){
+                            //alert(loop + "" + end);
+                            if(!(document.getElementById(loop).hasChildNodes())){
+                                valid = true;
+                            }
+                            else{
+                                return false;
+                            }
+                        }
+                        return valid;
+                    }
+                }
+                else {
+                    return false;
+                }
+            }
+        
+            function validateCrossMove(srcID,dstID,srcType,dstType,color){
+                /*
+                 * For cross move the difference between source and destination would be divisible by either 7 or 9. Also 
+                 * the background color for both has to be same.
+                 * Depending on the direction of the move we check each cell between source and destination to see if they are
+                 * empty.
+                 */
+                var abs = Math.abs(dstID-srcID);
+                var diff = dstID-srcID;
+                if ((abs%7 === 0 || abs%9 === 0) && color){
+                    if(diff%7 === 0){
+                        var valid = false;
+                        if(diff > 0){
+                            for(loop = (srcID+7) ; loop<=dstID ; loop+=7){
+                                if(!(document.getElementById(loop).hasChildNodes()) || loop===dstID){
+                                    valid = true;
+                                }
+                                else{
+                                    return false;
+                                }
+                                if(leftEdge.indexOf(loop) !== -1){
+                                        return valid;
+                                }
+                            }
+                            return valid;
+                        }
+                        else{
+                            for(loop = (srcID-7) ; loop>=dstID ; loop-=7){
+                                if(!(document.getElementById(loop).hasChildNodes()) || loop===dstID){
+                                    valid = true;
+                                }
+                                else{
+                                    return false;
+                                }
+                                if(rightEdge.indexOf(loop) !== -1){
+                                        return valid;
+                                }
+                            }
+                            return valid;
+
+                        }
+                    }
+                    else if(diff % 9 === 0){
+                        if(diff > 0){
+                            for(loop = (srcID+9) ; loop<=dstID ; loop+=9){
+                                if(!(document.getElementById(loop).hasChildNodes()) || loop===dstID){
+                                    valid = true;
+                                }
+                                else{
+                                    return false;
+                                }
+                                if(rightEdge.indexOf(loop) !== -1){
+                                        return valid;
+                                }
+                            }
+                            return valid;
+                        }
+                        else{
+                            for(loop = (srcID-9) ; loop>=dstID ; loop-=9){
+                                if(!(document.getElementById(loop).hasChildNodes()) || loop===dstID){
+                                    valid = true;
+                                }
+                                else{
+                                    return false;
+                                }
+                                if(leftEdge.indexOf(loop) !== -1){
+                                        return valid;
+                                }
+                            }
+                            return valid;
+                        }
+                    }
+                }
+                return false;
+            }
+        </script>
+    </body>
+</html>
